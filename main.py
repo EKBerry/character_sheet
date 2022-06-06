@@ -52,7 +52,7 @@ def profile():
                     sg.I('', size=(3, 1), key='DAY'), sg.T('/'), sg.I('', size=(5, 1), key='YEAR')],
                    [sg.Text("Enter a short description of your character"),
                     sg.Multiline(size=(25, 3), key='SUMMARY')],
-                   [sg.B('Submit'), sg.B("Open Character"), sg.B('Exit')]]
+                   [sg.B('Submit'), sg.B("Clear"), sg.B("Open Character"), sg.B('Exit')]]
 
     window = sg.Window('Character Sheet', new_profile)
 
@@ -61,18 +61,28 @@ def profile():
 
         if event == sg.WIN_CLOSED or event == 'Exit':  # if user closes window or clicks cancel
             break
+        elif event == "Clear":
+            for i in values:
+                window[i].update('')
+                
+            print("Window Cleared!")
+
         elif event == 'Open Character':
 
             folder_or_file = sg.popup_get_file('Choose your file', keep_on_top=True)
             f = open(folder_or_file)
             data = json.load(f)
             print(data)
+            main_val = data['MAIN']
+            side_val = data['SIDE']
+            hero_val = data['HERO']
+
             window['NAME'].update(data['NAME'])
             window['AGE'].update(data['AGE'])
             window['PRONOUNS'].update(data['PRONOUNS'])
-            window['MAIN'].update(value=data['MAIN'])
-            window['SIDE'].update(value=data['SIDE'])
-            window['HERO'].update(data['HERO'])
+            window['MAIN'].update(eval(main_val))
+            window['SIDE'].update(eval(side_val))
+            window['HERO'].update(eval(hero_val))
             birth_arr = data['BIRTHDAY'].split()
             month = birth_arr[0]
             day = birth_arr[2]
@@ -82,8 +92,6 @@ def profile():
             window['DAY'].update(day)
             window['YEAR'].update(year)
             window['SUMMARY'].update(data['SUMMARY'])
-
-
 
         elif event == 'Submit':
             name = values['NAME']
