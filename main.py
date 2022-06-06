@@ -44,10 +44,10 @@ def profile():
                    [sg.Text("Preferred Pronouns"),
                     sg.Combo(values=('She/Her', 'He/Him', 'They/Them'), key="PRONOUNS")],
                    # Key is basically its variable Name
-                   [sg.Radio("Main Character", "char-imp", k='MAIN', default=False),
-                    sg.Radio("Side Character", "char-imp", k='SIDE', default=False)],
+                   [sg.Checkbox("Main Character", k='MAIN', default=False),
+                    sg.Checkbox("Side Character", k='SIDE', default=False)],
                    # Separate line to determine if Villain or not.
-                   [sg.Checkbox("Antagonist", default=False, k='HERO')],
+                   [sg.Checkbox("Hero", default=True, k='HERO')],
                    [sg.Text("Enter Birthday"), sg.I('', size=(3, 1), key='MONTH'), sg.T('/'),
                     sg.I('', size=(3, 1), key='DAY'), sg.T('/'), sg.I('', size=(5, 1), key='YEAR')],
                    [sg.Text("Enter a short description of your character"),
@@ -58,23 +58,26 @@ def profile():
 
     while True:
         event, values = window.read()
+
         if event == sg.WIN_CLOSED or event == 'Exit':  # if user closes window or clicks cancel
             break
         elif event == 'Open Character':
+
             folder_or_file = sg.popup_get_file('Choose your file', keep_on_top=True)
             f = open(folder_or_file)
             data = json.load(f)
+            print(data)
             window['NAME'].update(data['NAME'])
-            window['AGE'].update(data['NAME'])
-            window['PRONOUNS'].update(data['NAME'])
-            window['MAIN'].update(data['NAME'])
-            window['SIDE'].update(data['NAME'])
-            window['HERO'].update(data['NAME'])
+            window['AGE'].update(data['AGE'])
+            window['PRONOUNS'].update(data['PRONOUNS'])
+            window['MAIN'].update(value=data['MAIN'])
+            window['SIDE'].update(value=data['SIDE'])
+            window['HERO'].update(data['HERO'])
             birth_arr = data['BIRTHDAY'].split()
-            print(birth_arr)
             month = birth_arr[0]
-            day = birth_arr[0]
-            year = birth_arr[0]
+            day = birth_arr[2]
+            year = birth_arr[4]
+
             window['MONTH'].update(month)
             window['DAY'].update(day)
             window['YEAR'].update(year)
@@ -99,7 +102,7 @@ def profile():
                             [sg.T("PRONOUNS: " + pn)],
                             [sg.T("MAIN CHARACTER: " + main)],
                             [sg.T("SIDE CHARACTER: " + side)],
-                            [sg.T("ANTAGONIST: " + hero)],
+                            [sg.T("HERO: " + hero)],
                             [sg.T("BIRTHDAY: " + birthday)],
                             [sg.T("SUMMARY: " + summary)],
                             [sg.B("Submit")]
@@ -115,7 +118,7 @@ def profile():
                                  "PRONOUNS": pn,
                                  "MAIN": main,
                                  "SIDE": side,
-                                 "ANTAGONIST": hero,
+                                 "HERO": hero,
                                  "BIRTHDAY": birthday,
                                  "SUMMARY": summary}
                     file_name = name + ".json"
