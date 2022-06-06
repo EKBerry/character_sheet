@@ -32,9 +32,9 @@ else:
 # title = 'Customized Titlebar Window'
 # Here the titlebar colors are based on the theme. A few suggestions are shown. Try each of them
 # layout = [title_bar(title, sg.theme_button_color()[0], sg.theme_button_color()[1])]
-def array_string(str):
+def array_string(date):
     str1 = " "
-    return str1.join(str)
+    return str1.join(date)
 
 
 def profile():
