@@ -64,7 +64,7 @@ def profile():
         elif event == "Clear":
             for i in values:
                 window[i].update('')
-                
+
             print("Window Cleared!")
 
         elif event == 'Open Character':
@@ -73,16 +73,13 @@ def profile():
             f = open(folder_or_file)
             data = json.load(f)
             print(data)
-            main_val = data['MAIN']
-            side_val = data['SIDE']
-            hero_val = data['HERO']
 
             window['NAME'].update(data['NAME'])
             window['AGE'].update(data['AGE'])
             window['PRONOUNS'].update(data['PRONOUNS'])
-            window['MAIN'].update(eval(main_val))
-            window['SIDE'].update(eval(side_val))
-            window['HERO'].update(eval(hero_val))
+            window['MAIN'].update(eval(data['MAIN']))
+            window['SIDE'].update(eval(data['SIDE']))
+            window['HERO'].update(eval(data['HERO']))
             birth_arr = data['BIRTHDAY'].split()
             month = birth_arr[0]
             day = birth_arr[2]
