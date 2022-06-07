@@ -1,10 +1,12 @@
 {
      "NAME": "Kahlid Davis",
-     "AGE": "24",
+     "AGE": "65",
+     "HEIGHT": "203",
+     "WEIGHT": "299",
      "PRONOUNS": "He/Him",
      "MAIN": "True",
      "SIDE": "False",
-     "HERO": "False",
-     "BIRTHDAY": "07 - 01 - 2019",
+     "HERO": "True",
+     "BIRTHDAY": "07 - 02 - 1999",
      "SUMMARY": ""
 }

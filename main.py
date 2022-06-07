@@ -41,7 +41,7 @@ def profile():
     sg.theme('DarkAmber')
     new_profile = [[sg.Text("Enter Character Name"), sg.I('', size=(18, 1), key='NAME')],
                    [sg.Text("Enter Age"), sg.I('', size=(6, 1), key="AGE"),
-                    sg.T("Enter Height"), sg.I('', size=(6, 1), key="HEIGHT"),
+                    sg.T("Enter Height *in CM*"), sg.I('', size=(6, 1), key="HEIGHT"),
                     sg.T("Enter Weight"), sg.I('', size=(6, 1), key="WEIGHT")],
                    [sg.Text("Enter Birthday"), sg.I('', size=(3, 1), key='MONTH'), sg.T('/'),
                     sg.I('', size=(3, 1), key='DAY'), sg.T('/'), sg.I('', size=(5, 1), key='YEAR')],
@@ -78,6 +78,8 @@ def profile():
             window['NAME'].update(data['NAME'])
             window['AGE'].update(data['AGE'])
             window['PRONOUNS'].update(data['PRONOUNS'])
+            window['HEIGHT'].update(data['HEIGHT'])
+            window['WEIGHT'].update(data['WEIGHT'])
             window['MAIN'].update(eval(data['MAIN']))
             window['SIDE'].update(eval(data['SIDE']))
             window['HERO'].update(eval(data['HERO']))
@@ -94,6 +96,8 @@ def profile():
         elif event == 'Submit':
             name = values['NAME']
             age = values['AGE']
+            height = values['HEIGHT']
+            weight = values['WEIGHT']
             pn = values['PRONOUNS']
             main = str(values['MAIN'])
             side = str(values['SIDE'])
@@ -105,6 +109,8 @@ def profile():
             print(birthday)
             print_layout = [[sg.T("NAME: " + name)],
                             [sg.T("AGE:" + age)],
+                            [sg.T("HEIGHT:" + height)],
+                            [sg.T("WEIGHT:" + weight)],
                             [sg.T("PRONOUNS: " + pn)],
                             [sg.T("MAIN CHARACTER: " + main)],
                             [sg.T("SIDE CHARACTER: " + side)],
@@ -121,6 +127,8 @@ def profile():
                 elif event1 == 'Submit':
                     character = {"NAME": name,
                                  "AGE": age,
+                                 "HEIGHT": height,
+                                 "WEIGHT": weight,
                                  "PRONOUNS": pn,
                                  "MAIN": main,
                                  "SIDE": side,
