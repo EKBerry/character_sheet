@@ -40,16 +40,17 @@ def array_string(date):
 def profile():
     sg.theme('DarkAmber')
     new_profile = [[sg.Text("Enter Character Name"), sg.I('', size=(18, 1), key='NAME')],
-                   [sg.Text("Enter Age"), sg.I('', size=(6, 1), key="AGE")],
+                   [sg.Text("Enter Age"), sg.I('', size=(6, 1), key="AGE"),
+                    sg.T("Enter Height"), sg.I('', size=(6, 1), key="HEIGHT"),
+                    sg.T("Enter Weight"), sg.I('', size=(6, 1), key="WEIGHT")],
+                   [sg.Text("Enter Birthday"), sg.I('', size=(3, 1), key='MONTH'), sg.T('/'),
+                    sg.I('', size=(3, 1), key='DAY'), sg.T('/'), sg.I('', size=(5, 1), key='YEAR')],
                    [sg.Text("Preferred Pronouns"),
                     sg.Combo(values=('She/Her', 'He/Him', 'They/Them'), key="PRONOUNS")],
                    # Key is basically its variable Name
                    [sg.Checkbox("Main Character", k='MAIN', default=False),
-                    sg.Checkbox("Side Character", k='SIDE', default=False)],
-                   # Separate line to determine if Villain or not.
-                   [sg.Checkbox("Hero", default=True, k='HERO')],
-                   [sg.Text("Enter Birthday"), sg.I('', size=(3, 1), key='MONTH'), sg.T('/'),
-                    sg.I('', size=(3, 1), key='DAY'), sg.T('/'), sg.I('', size=(5, 1), key='YEAR')],
+                    sg.Checkbox("Side Character", k='SIDE', default=False),
+                    sg.Checkbox("Hero", default=True, k='HERO')],
                    [sg.Text("Enter a short description of your character"),
                     sg.Multiline(size=(25, 3), key='SUMMARY')],
                    [sg.B('Submit'), sg.B("Clear"), sg.B("Open Character"), sg.B('Exit')]]
