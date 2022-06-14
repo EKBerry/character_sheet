@@ -39,19 +39,17 @@ def array_string(date):
 
 def profile():
     sg.theme('DarkAmber')
-    new_profile = [[sg.Text("Enter Character Name"), sg.I('', size=(18, 1), key='NAME')],
-                   [sg.Text("Enter Age"), sg.I('', size=(6, 1), key="AGE"),
-                    sg.T("Enter Height *in CM*"), sg.I('', size=(6, 1), key="HEIGHT"),
-                    sg.T("Enter Weight"), sg.I('', size=(6, 1), key='WEIGHT')],
-                   [sg.Text("Enter Birthday"), sg.I('', size=(3, 1), key='MONTH'), sg.T('/'),
-                    sg.I('', size=(3, 1), key='DAY'), sg.T('/'), sg.I('', size=(5, 1), key='YEAR')],
-                   [sg.Text("Preferred Pronouns"),
-                    sg.Combo(pronouns.read(), size=(10, 0), key="PRONOUNS"), sg.B("Add")],
-                   [sg.Checkbox("Main Character", k='MAIN', default=False),
-                    sg.Checkbox("Side Character", k='SIDE', default=False)],
-                   [sg.Combo(values=('Hero', 'Villain', 'Anti-Hero', 'Anti-Villain'))],
-                   [sg.Text("Enter a short description of your character"),
-                    sg.Multiline(size=(25, 3), key='SUMMARY')],
+    new_profile = [[sg.Text("Enter Character Name:"), sg.I('', size=(18, 1), key='-FNAME-'), sg.I('', size=(18, 1), key='-LNAME-')],
+                   [sg.Text("Enter Age:"), sg.I('', size=(6, 1), key="-AGE-"),
+                    sg.T("Enter Height *in CM*:"), sg.I('', size=(6, 1), key="-HEIGHT-"),
+                    sg.T("Enter Weight:"), sg.I('', size=(6, 1), key='-WEIGHT-')],
+                   [sg.Text("Enter Birthday:"), sg.I('', size=(3, 1), key='-MONTH-'), sg.T('/'),
+                    sg.I('', size=(3, 1), key='-DAY-'), sg.T('/'), sg.I('', size=(5, 1), key='-YEAR-')],
+                   [sg.Text("Preferred Pronouns:"),
+                    sg.Combo(pronouns.read(), size=(10, 0), key="-PRONOUNS-"), sg.B("Add")],
+                   [sg.Text("Role: "), sg.Combo(values=('Main Hero', 'Side Hero', 'Main Villian', 'Side Villain'), k="-ROLE-")],
+                   [sg.Text("Enter a short description of your character: "),
+                    sg.Multiline(size=(25, 3), key='-SUMMARY-')],
                    [sg.B('Submit'), sg.B("Clear"), sg.B("Open Character"), sg.B('Exit')]]
 
     window = sg.Window('Character Sheet', new_profile)
@@ -90,43 +88,42 @@ def profile():
             data = json.load(f)
             print(data)
 
-            window['NAME'].update(data['NAME'])
-            window['AGE'].update(data['AGE'])
-            window['PRONOUNS'].update(data['PRONOUNS'])
-            window['HEIGHT'].update(data['HEIGHT'])
-            window['WEIGHT'].update(data['WEIGHT'])
-            window['MAIN'].update(eval(data['MAIN']))
-            window['SIDE'].update(eval(data['SIDE']))
+            window['-FNAME-'].update(data['FNAME'])
+            window['-LNAME-'].update(data['LNAME'])
+            window['-AGE-'].update(data['AGE'])
+            window['-PRONOUNS-'].update(data['PRONOUNS'])
+            window['-HEIGHT-'].update(data['HEIGHT'])
+            window['-WEIGHT-'].update(data['WEIGHT'])
+            window['-ROLE-'].update(data['ROLE'])
             birth_arr = data['BIRTHDAY'].split()
             month = birth_arr[0]
             day = birth_arr[2]
             year = birth_arr[4]
 
-            window['MONTH'].update(month)
-            window['DAY'].update(day)
-            window['YEAR'].update(year)
-            window['SUMMARY'].update(data['SUMMARY'])
+            window['-MONTH-'].update(month)
+            window['-DAY-'].update(day)
+            window['-YEAR-'].update(year)
+            window['-SUMMARY-'].update(data['SUMMARY'])
 
         elif event == 'Submit':
-            name = values['NAME']
-            age = values['AGE']
-            height = values['HEIGHT']
-            weight = values['WEIGHT']
-            pn = values['PRONOUNS']
-            main = str(values['MAIN'])
-            side = str(values['SIDE'])
-            bdraw = values['MONTH'], "-", values['DAY'], "-", values['YEAR']
+            fname = values['-FNAME-']
+            lname = values['-LNAME-']
+            age = values['-AGE-']
+            height = values['-HEIGHT-']
+            weight = values['-WEIGHT-']
+            pn = values['-PRONOUNS-']
+            role = str(values['-ROLE-'])
+            bdraw = values['-MONTH-'], "-", values['-DAY-'], "-", values['-YEAR-']
             print(bdraw)
-            summary = values['SUMMARY']
+            summary = values['-SUMMARY-']
             birthday = array_string(bdraw)
             print(birthday)
-            print_layout = [[sg.T("NAME: " + name)],
+            print_layout = [[sg.T("NAME: " + fname), sg.T(lname)],
                             [sg.T("AGE:" + age)],
                             [sg.T("HEIGHT:" + height)],
                             [sg.T("WEIGHT:" + weight)],
                             [sg.T("PRONOUNS: " + pn)],
-                            [sg.T("MAIN CHARACTER: " + main)],
-                            [sg.T("SIDE CHARACTER: " + side)],
+                            [sg.T("CHARACTER ROLE: " + role)],
                             [sg.T("BIRTHDAY: " + birthday)],
                             [sg.T("SUMMARY: " + summary)],
                             [sg.B("Submit")]
@@ -137,16 +134,16 @@ def profile():
                 if event1 == sg.WIN_CLOSED:
                     break
                 elif event1 == 'Submit':
-                    character = {"NAME": name,
+                    character = {"FNAME": fname,
+                                 "LNAME": lname,
                                  "AGE": age,
                                  "HEIGHT": height,
                                  "WEIGHT": weight,
                                  "PRONOUNS": pn,
-                                 "MAIN": main,
-                                 "SIDE": side,
+                                 "ROLE": role,
                                  "BIRTHDAY": birthday,
                                  "SUMMARY": summary}
-                    file_name = name + ".json"
+                    file_name = fname + ".json"
                     char_raw = os.path.join(directory, file_name)
                     char_file = open(char_raw, "w")
                     char_json = json.dumps(character, indent=5)
