@@ -18,7 +18,15 @@ import PySimpleGUI as sg
 #     {"book3": ("Part3", "Part4", "Part5")}
 #   ]
 # }
-pronouns = open("Character_Sheet/pronouns.txt", "r")
+pn_file = open("Character_Sheet/pronouns.txt", "r")
+pn_data = pn_file.readlines()
+
+print(pn_data[0].replace("\n", ""))
+print(pn_data[1].replace("\n", ""))
+pn_list = []
+for x in range(len(pn_data)):
+    pn_list.append(pn_data[x].replace('\n', ''))
+print(pn_list)
 directory = "Character_Sheet"
 parent_dir = "E:\Practice\character_sheet_holder"
 path = os.path.join(parent_dir, directory)
@@ -39,15 +47,17 @@ def array_string(date):
 
 def profile():
     sg.theme('DarkAmber')
-    new_profile = [[sg.Text("Enter Character Name:"), sg.I('', size=(18, 1), key='-FNAME-'), sg.I('', size=(18, 1), key='-LNAME-')],
+    new_profile = [[sg.Text("Enter Character Name:"), sg.I('', size=(18, 1), key='-FNAME-'),
+                    sg.I('', size=(18, 1), key='-LNAME-')],
                    [sg.Text("Enter Age:"), sg.I('', size=(6, 1), key="-AGE-"),
                     sg.T("Enter Height *in CM*:"), sg.I('', size=(6, 1), key="-HEIGHT-"),
                     sg.T("Enter Weight:"), sg.I('', size=(6, 1), key='-WEIGHT-')],
                    [sg.Text("Enter Birthday:"), sg.I('', size=(3, 1), key='-MONTH-'), sg.T('/'),
                     sg.I('', size=(3, 1), key='-DAY-'), sg.T('/'), sg.I('', size=(5, 1), key='-YEAR-')],
                    [sg.Text("Preferred Pronouns:"),
-                    sg.Combo(pronouns.read(), size=(10, 0), key="-PRONOUNS-"), sg.B("Add")],
-                   [sg.Text("Role: "), sg.Combo(values=('Main Hero', 'Side Hero', 'Main Villian', 'Side Villain'), k="-ROLE-")],
+                    sg.Combo(pn_list, size=(10, 0), key="-PRONOUNS-"), sg.B("Add")],
+                   [sg.Text("Role: "),
+                    sg.Combo(values=('Main Hero', 'Side Hero', 'Main Villian', 'Side Villain'), k="-ROLE-")],
                    [sg.Text("Enter a short description of your character: "),
                     sg.Multiline(size=(25, 3), key='-SUMMARY-')],
                    [sg.B('Submit'), sg.B("Clear"), sg.B("Open Character"), sg.B('Exit')]]
@@ -69,7 +79,7 @@ def profile():
                 if add_event == sg.WIN_CLOSED or add_event == 'Exit':  # if user closes window or clicks cancel
                     break
                 elif event == "Add":
-                    pnf = open("Character_Sheet/pronouns.txt", "at+")
+                    pnf = open("Character_Sheet/pronouns.txt", "a+")
                     np = values['-NPN-'] + "/" + values['-NPN1-']
                     pnf.write("\n" + np.upper())
                     pnf.close()
