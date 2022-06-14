@@ -18,15 +18,6 @@ import PySimpleGUI as sg
 #     {"book3": ("Part3", "Part4", "Part5")}
 #   ]
 # }
-pn_file = open("Character_Sheet/pronouns.txt", "r")
-pn_data = pn_file.readlines()
-
-print(pn_data[0].replace("\n", ""))
-print(pn_data[1].replace("\n", ""))
-pn_list = []
-for x in range(len(pn_data)):
-    pn_list.append(pn_data[x].replace('\n', ''))
-print(pn_list)
 directory = "Character_Sheet"
 parent_dir = "E:\Practice\character_sheet_holder"
 path = os.path.join(parent_dir, directory)
@@ -36,15 +27,26 @@ if os.path.isdir(directory):
 else:
     os.mkdir(directory)
 
+# Loading the Pronouns file  while putting the file's data in a variable.
+pn_file = open("Character_Sheet/pronouns.txt", "r")
+pn_data = pn_file.readlines()
 
-# title = 'Customized Titlebar Window'
-# Here the titlebar colors are based on the theme. A few suggestions are shown. Try each of them
-# layout = [title_bar(title, sg.theme_button_color()[0], sg.theme_button_color()[1])]
-def array_string(date):
+# List to be used in the program itself later
+pn_list = []
+
+# Removing the Newline in the data in placing the new data into a list to be used
+for x in range(len(pn_data)):
+    pn_list.append(pn_data[x].replace('\n', ''))
+print(pn_list)
+
+
+# Transform Arrays into a string
+def array_string(var):
     str1 = " "
-    return str1.join(date)
+    return str1.join(var)
 
 
+# The Main Profile Maker
 def profile():
     sg.theme('DarkAmber')
     new_profile = [[sg.Text("Enter Character Name:"), sg.I('', size=(18, 1), key='-FNAME-'),
@@ -69,6 +71,7 @@ def profile():
 
         if event == sg.WIN_CLOSED or event == 'Exit':  # if user closes window or clicks cancel
             break
+        # Add Pronouns Button. Adds Pronouns to the TXT file to later be used.
         elif event == "Add":
             add_layout = [[sg.I('', size=(5, 2), key="-NPN-"), sg.T("/"), sg.I('', size=(5, 2), key="-NPN1-")],
                           [sg.B("Add"), sg.B("Exit")]]
@@ -84,13 +87,13 @@ def profile():
                     pnf.write("\n" + np.upper())
                     pnf.close()
                     sg.popup("Pronoun added!")
-
+        # Clears the input areas to make a new profile faster.
         elif event == "Clear":
             for i in values:
                 window[i].update('')
 
             print("Window Cleared!")
-
+        # Opens a saved character and places data into the input boxes
         elif event == 'Open Character':
 
             folder_or_file = sg.popup_get_file('Choose your file', keep_on_top=True)
@@ -114,7 +117,7 @@ def profile():
             window['-DAY-'].update(day)
             window['-YEAR-'].update(year)
             window['-SUMMARY-'].update(data['SUMMARY'])
-
+        # Shows a box with the data, saves the profile (if new) and updates existing profiles.
         elif event == 'Submit':
             fname = values['-FNAME-']
             lname = values['-LNAME-']
