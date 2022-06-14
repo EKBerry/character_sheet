@@ -18,7 +18,7 @@ import PySimpleGUI as sg
 #     {"book3": ("Part3", "Part4", "Part5")}
 #   ]
 # }
-pronouns = 'She/Her', 'He/Him', 'They/Them'
+pronouns = open("Character_Sheet/pronouns.txt", "r")
 directory = "Character_Sheet"
 parent_dir = "E:\Practice\character_sheet_holder"
 path = os.path.join(parent_dir, directory)
@@ -42,15 +42,14 @@ def profile():
     new_profile = [[sg.Text("Enter Character Name"), sg.I('', size=(18, 1), key='NAME')],
                    [sg.Text("Enter Age"), sg.I('', size=(6, 1), key="AGE"),
                     sg.T("Enter Height *in CM*"), sg.I('', size=(6, 1), key="HEIGHT"),
-                    sg.T("Enter Weight"), sg.I('', size=(6, 1), key="WEIGHT")],
+                    sg.T("Enter Weight"), sg.I('', size=(6, 1), key='WEIGHT')],
                    [sg.Text("Enter Birthday"), sg.I('', size=(3, 1), key='MONTH'), sg.T('/'),
                     sg.I('', size=(3, 1), key='DAY'), sg.T('/'), sg.I('', size=(5, 1), key='YEAR')],
                    [sg.Text("Preferred Pronouns"),
-                    sg.Combo(values=('She/Her', 'He/Him', 'They/Them'), key="PRONOUNS")],
-                   # Key is basically its variable Name
+                    sg.Combo(pronouns.read(), size=(10, 0), key="PRONOUNS"), sg.B("Add")],
                    [sg.Checkbox("Main Character", k='MAIN', default=False),
-                    sg.Checkbox("Side Character", k='SIDE', default=False),
-                    sg.Checkbox("Hero", default=True, k='HERO')],
+                    sg.Checkbox("Side Character", k='SIDE', default=False)],
+                   [sg.Combo(values=('Hero', 'Villain', 'Anti-Hero', 'Anti-Villain'))],
                    [sg.Text("Enter a short description of your character"),
                     sg.Multiline(size=(25, 3), key='SUMMARY')],
                    [sg.B('Submit'), sg.B("Clear"), sg.B("Open Character"), sg.B('Exit')]]
@@ -62,6 +61,22 @@ def profile():
 
         if event == sg.WIN_CLOSED or event == 'Exit':  # if user closes window or clicks cancel
             break
+        elif event == "Add":
+            add_layout = [[sg.I('', size=(5, 2), key="-NPN-"), sg.T("/"), sg.I('', size=(5, 2), key="-NPN1-")],
+                          [sg.B("Add"), sg.B("Exit")]]
+
+            add_window = sg.Window('Additional', add_layout)
+            while True:
+                add_event, values = add_window.read()
+                if add_event == sg.WIN_CLOSED or add_event == 'Exit':  # if user closes window or clicks cancel
+                    break
+                elif event == "Add":
+                    pnf = open("Character_Sheet/pronouns.txt", "at+")
+                    np = values['-NPN-'] + "/" + values['-NPN1-']
+                    pnf.write("\n" + np.upper())
+                    pnf.close()
+                    sg.popup("Pronoun added!")
+
         elif event == "Clear":
             for i in values:
                 window[i].update('')
@@ -82,7 +97,6 @@ def profile():
             window['WEIGHT'].update(data['WEIGHT'])
             window['MAIN'].update(eval(data['MAIN']))
             window['SIDE'].update(eval(data['SIDE']))
-            window['HERO'].update(eval(data['HERO']))
             birth_arr = data['BIRTHDAY'].split()
             month = birth_arr[0]
             day = birth_arr[2]
@@ -101,7 +115,6 @@ def profile():
             pn = values['PRONOUNS']
             main = str(values['MAIN'])
             side = str(values['SIDE'])
-            hero = str(values['HERO'])
             bdraw = values['MONTH'], "-", values['DAY'], "-", values['YEAR']
             print(bdraw)
             summary = values['SUMMARY']
@@ -114,7 +127,6 @@ def profile():
                             [sg.T("PRONOUNS: " + pn)],
                             [sg.T("MAIN CHARACTER: " + main)],
                             [sg.T("SIDE CHARACTER: " + side)],
-                            [sg.T("HERO: " + hero)],
                             [sg.T("BIRTHDAY: " + birthday)],
                             [sg.T("SUMMARY: " + summary)],
                             [sg.B("Submit")]
@@ -132,7 +144,6 @@ def profile():
                                  "PRONOUNS": pn,
                                  "MAIN": main,
                                  "SIDE": side,
-                                 "HERO": hero,
                                  "BIRTHDAY": birthday,
                                  "SUMMARY": summary}
                     file_name = name + ".json"
